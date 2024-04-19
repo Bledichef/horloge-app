@@ -7,6 +7,7 @@ const dayName = days[date.getDay()];
 const dateString = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
 
 
+
 const themes = {
     light: {
         
@@ -44,8 +45,63 @@ const themes = {
   };
 
 const Horloge = () => {
+
   const [date, setDate] = useState(new Date());
   const [theme, setTheme] = useState('light');
+
+  // Changez alarmTime pour être un tableau d'heures d'alarme
+  const [alarmTimes, setAlarmTimes] = useState([]);
+
+  const setAlarm = () => {
+    const time = prompt("Entrez l'heure de l'alarme au format HH:MM");
+    setAlarmTimes([...alarmTimes, time]);
+  };
+
+  //const [alarmTimes, setAlarmTimes] = useState(["07:00", "08:00", "09:00"]); // Exemple de données
+
+  useEffect(() => {
+    let alarmTriggeredThisMinute = false;
+    let alarmInterval;
+    let alarmTimeout;
+  
+    const interval = setInterval(() => {
+      const now = new Date();
+      const nowHours = now.getHours();
+      const nowMinutes = now.getMinutes();
+  
+      alarmTimes.forEach(time => {
+        const [alarmHours, alarmMinutes] = time.split(':').map(Number);
+  
+        if (nowHours === alarmHours && nowMinutes === alarmMinutes) {
+          if (!alarmTriggeredThisMinute) {
+            console.log("C'est l'heure de l'alarme !");
+            alarmInterval = setInterval(() => document.body.classList.toggle('alarm'), 500);
+            alarmTriggeredThisMinute = true;
+  
+            // Supprimez l'alarme une minute après qu'elle ait été déclenchée
+            alarmTimeout = setTimeout(() => {
+              setAlarmTimes(alarmTimes.filter(alarmTime => alarmTime !== time));
+              clearInterval(alarmInterval);
+              document.body.classList.remove('alarm');
+              alarmTriggeredThisMinute = false;
+            }, 60000);
+          }
+        } else {
+          if (alarmTriggeredThisMinute) {
+            clearInterval(alarmInterval);
+            document.body.classList.remove('alarm');
+            alarmTriggeredThisMinute = false;
+          }
+        }
+      });
+    }, 1000);
+  
+    return () => {
+      clearInterval(interval);
+      clearInterval(alarmInterval);
+      clearTimeout(alarmTimeout);
+    };
+  }, [alarmTimes, setAlarmTimes]);
 
   useEffect(() => {
     const timerID = setInterval(() => setDate(new Date()), 1000);
@@ -95,10 +151,17 @@ const Horloge = () => {
         <div className="hand minute-hand" style={{ transform: `rotate(${minutes}deg)` }} />
         <div className="hand second-hand" style={{ transform: `rotate(${seconds}deg)` }} />
       </div>
-      {/* Ajoutez ces lignes pour afficher la date et le jour de la semaine */}
-      <div className={`date-container ${theme}`}>
-    <p>{dayName}, {dateString}</p>
-</div>
+      <div className="horloge-container">
+      {/* Votre code existant... */}
+      <button onClick={setAlarm}>Définir une alarme</button>
+      {/* Affichez les heures d'alarme sur la page */}
+      <div className="alarm-times">
+        {alarmTimes.map((time, index) => (
+          <p key={index}>Alarme programmée pour : {time}</p>
+        ))}
+      </div>
+    </div> 
+
       <button onClick={toggleTheme}>Changer de Theme</button>
     </div>
   );

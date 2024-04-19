@@ -166,3 +166,17 @@ button:active {
     border-radius: 10px; /* Ajouter un arrondi aux coins pour un aspect plus doux */
     padding: 10px; /* Ajouter du padding pour donner de l'espace autour du texte */
 }
+
+.alarm-times{
+    color: var(--text-color);
+}
+
+@keyframes alarm {
+    0% { background-color: var(--background-color); }
+    50% { background-color: red; }
+    100% { background-color: var(--background-color); }
+  }
+  
+  body.alarm {
+    animation: alarm 1s ease-in-out;
+  }
