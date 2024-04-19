@@ -1,0 +1,80 @@
+.horloge {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border: 16px solid #333;
+    border-radius: 50%;
+    padding: 20px;
+    margin: 50px auto;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  }
+  
+  .horloge::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 2px;
+    background: #333;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .horloge h2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2em;
+    text-align: center;
+  }
+  
+  .hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: center bottom;
+    transition: transform 0.3s ease-in-out;
+    border-radius: 4px; /* Ajouter des coins arrondis */
+  }
+  
+  .hour-marker {
+    position: absolute;
+    width: 1px;
+    height: 50%;
+    background: #ccc;
+    top: 0;
+    left: 50%;
+    transform-origin: center bottom;
+    opacity: 0.6; /* Rendre les marqueurs d'heure un peu transparents */
+  }
+  
+  .hour-hand {
+    width: 4px;
+    height: 30%;
+    background: #333;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Ajouter une ombre pour donner de la profondeur */
+  }
+  
+  .minute-hand {
+    width: 3px;
+    height: 40%;
+    background: #666;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Ajouter une ombre pour donner de la profondeur */
+  }
+  
+  .second-hand {
+    width: 2px;
+    height: 45%;
+    background: #999;
+  }
+  .hour-marker span {
+
+  bottom: -20px; /* Ajuster en fonction de la taille de votre horloge */
+
+  transform: translateX(-50%) rotate(-30deg); /* Centrer et annuler la rotation du marqueur d'heure */
+  font-size: 16px; /* Ajuster en fonction de la taille de votre horloge */
+  font-weight: bold; /* Rendre le texte en gras */
+}
