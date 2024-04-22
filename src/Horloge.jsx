@@ -46,15 +46,35 @@ const themes = {
 
 const Horloge = () => {
 
+  
   const [date, setDate] = useState(new Date());
   const [theme, setTheme] = useState('light');
+  const [hour, setHour] = useState("");
+  const [minute, setMinute] = useState("");
+
+
 
   // Changez alarmTime pour être un tableau d'heures d'alarme
   const [alarmTimes, setAlarmTimes] = useState([]);
 
-  const setAlarm = () => {
-    const time = prompt("Entrez l'heure de l'alarme au format HH:MM");
-    setAlarmTimes([...alarmTimes, time]);
+  const setAlarm = (event) => {
+    event.preventDefault();
+    if (hour && minute) {
+      setAlarmTimes([...alarmTimes, `${hour}:${minute}`]);
+  
+      // Demander la permission de notification
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          // Envoyer une notification
+          new Notification('Alarme programmée', {
+            body: `Une alarme a été programmée pour ${hour}:${minute}.`,
+          });
+        }
+      });
+  
+      setHour("");
+      setMinute("");
+    }
   };
 
   //const [alarmTimes, setAlarmTimes] = useState(["07:00", "08:00", "09:00"]); // Exemple de données
@@ -152,13 +172,37 @@ const Horloge = () => {
         <div className="hand second-hand" style={{ transform: `rotate(${seconds}deg)` }} />
       </div>
       <div className="horloge-container">
-      {/* Votre code existant... */}
-      <button onClick={setAlarm}>Définir une alarme</button>
-      {/* Affichez les heures d'alarme sur la page */}
+
+      <h1>Horloge</h1>
+      <p>{dayName} {dateString}</p>
+      <form onSubmit={setAlarm}>
+      <input type="number" min="0" max="23" value={hour} onChange={e => setHour(e.target.value)} placeholder="Heure" />
+      <input type="number" min="0" max="59" value={minute} onChange={e => setMinute(e.target.value)} placeholder="Minute" />
+      <button type="submit">Définir une alarme</button>
+    </form>
+
       <div className="alarm-times">
-        {alarmTimes.map((time, index) => (
-          <p key={index}>Alarme programmée pour : {time}</p>
-        ))}
+      {alarmTimes.map((time, index) => {
+      const now = new Date();
+      const [alarmHours, alarmMinutes] = time.split(':').map(Number);
+      const alarmTime = new Date();
+      alarmTime.setHours(alarmHours, alarmMinutes, 0, 0);
+
+      const diff = alarmTime - now;
+      const diffHours = Math.floor(diff / 1000 / 60 / 60);
+      const diffMinutes = Math.floor(diff / 1000 / 60) % 60;
+
+      return (
+        <p key={index}>
+          Alarme programmée pour : {time} (dans {diffHours} heures et {diffMinutes} minutes)
+          <button onClick={() => {
+            const newAlarmTimes = [...alarmTimes];
+            newAlarmTimes.splice(index, 1);
+            setAlarmTimes(newAlarmTimes);
+          }}>Supprimer</button>
+        </p>
+      );
+    })}
       </div>
     </div> 
 
