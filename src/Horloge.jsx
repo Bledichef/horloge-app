@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './Horloge.css';
+import moment from 'moment-timezone';
+
 
 const date = new Date();
 const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
 const dayName = days[date.getDay()];
 const dateString = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
+
 
 
 
@@ -25,6 +28,8 @@ const themes = {
       '--number-color': '#333',
       '--horloge-border-radius': '50%',
       '--horloge-background': '#fff',
+      '--p-text-color': '#333', 
+      '--h1-text-color': '#333', 
     },
     dark: {
       '--background-color': '#1f4037',
@@ -41,18 +46,35 @@ const themes = {
       '--number-color': '#fff',
       '--horloge-border-radius': '50%',
       '--horloge-background': '#333',
+      '--h1-text-color': '#fff',
+        '--p-text-color': '#ddd', 
+
     },
   };
 
 const Horloge = () => {
 
-  
+  const [timeInNewYork, setTimeInNewYork] = useState(moment().tz("America/New_York").format('HH:mm:ss'));
+  const [timeInParis, setTimeInParis] = useState(moment().tz("Europe/Paris").format('HH:mm:ss'));
+  const [timeInTokyo, setTimeInTokyo] = useState(moment().tz("Asia/Tokyo").format('HH:mm:ss'));
+
+
+
   const [date, setDate] = useState(new Date());
   const [theme, setTheme] = useState('light');
   const [hour, setHour] = useState("");
   const [minute, setMinute] = useState("");
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeInNewYork(moment().tz("America/New_York").format('HH:mm:ss'));
+      setTimeInParis(moment().tz("Europe/Paris").format('HH:mm:ss'));
+      setTimeInTokyo(moment().tz("Asia/Tokyo").format('HH:mm:ss'));
+    }, 1000);
 
+    // N'oubliez pas de nettoyer l'intervalle lorsque le composant est démonté
+    return () => clearInterval(interval);
+  }, []);
 
   // Changez alarmTime pour être un tableau d'heures d'alarme
   const [alarmTimes, setAlarmTimes] = useState([]);
@@ -163,6 +185,7 @@ const Horloge = () => {
   ));
 
   return (
+    
     <div className="horloge-container">
       <div className="horloge">
         {hourMarkers}
@@ -172,14 +195,16 @@ const Horloge = () => {
         <div className="hand second-hand" style={{ transform: `rotate(${seconds}deg)` }} />
       </div>
       <div className="horloge-container">
-
+      <p>Heure à New York : {timeInNewYork}</p>
+      <p>Heure à Paris : {timeInParis}</p>
+      <p>Heure à Tokyo : {timeInTokyo}</p>
       <h1>Horloge</h1>
       <p>{dayName} {dateString}</p>
-      <form onSubmit={setAlarm}>
-      <input type="number" min="0" max="23" value={hour} onChange={e => setHour(e.target.value)} placeholder="Heure" />
-      <input type="number" min="0" max="59" value={minute} onChange={e => setMinute(e.target.value)} placeholder="Minute" />
-      <button type="submit">Définir une alarme</button>
-    </form>
+      <form className="alarm-form" onSubmit={setAlarm}>
+  <input type="number" min="0" max="23" value={hour} onChange={e => setHour(e.target.value)} placeholder="Heure" />
+  <input type="number" min="0" max="59" value={minute} onChange={e => setMinute(e.target.value)} placeholder="Minute" />
+  <button type="submit">Définir une alarme</button>
+</form>
 
       <div className="alarm-times">
       {alarmTimes.map((time, index) => {
@@ -206,7 +231,7 @@ const Horloge = () => {
       </div>
     </div> 
 
-      <button onClick={toggleTheme}>Changer de Theme</button>
+    <button className="theme-button" onClick={toggleTheme}>Changer de Theme</button>
     </div>
   );
 };
