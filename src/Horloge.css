@@ -65,7 +65,7 @@ button:active {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px; /* Espace entre les éléments */
+    gap: 20px; 
     font-size: 1.2em;
     background: inherit;
     color: inherit;
@@ -136,9 +136,9 @@ button:active {
 
 .minute-marker {
     position: absolute;
-    width: 2px; /* Augmentez la largeur */
+    width: 2px; 
     height: 50%;
-    background: #A52A2A; /* Changez la couleur pour tester */
+    background: #A52A2A; 
     top: 0;
     left: 50%;
     transform-origin: center bottom;
@@ -168,12 +168,12 @@ button:active {
 
 .date-container {
     text-align: center;
-    margin: 30px 0; /* Augmenter la marge pour donner plus d'espace */
-    font-size: 1.5em; /* Augmenter la taille de la police pour rendre le texte plus lisible */
-    color: var(--text-color); /* Utiliser la variable de couleur de texte pour s'adapter au thème */
-    background-color: var(--background-color); /* Ajouter une couleur de fond pour distinguer le conteneur de date */
-    border-radius: 10px; /* Ajouter un arrondi aux coins pour un aspect plus doux */
-    padding: 10px; /* Ajouter du padding pour donner de l'espace autour du texte */
+    margin: 30px 0; 
+    font-size: 1.5em; 
+    color: var(--text-color); 
+    background-color: var(--background-color); 
+    border-radius: 10px; 
+    padding: 10px; 
 }
 
 .alarm-times{
@@ -218,13 +218,13 @@ button:active {
 }
 
 .alarm-form button {
-    background-color: #4CAF50; /* Choisissez la couleur que vous préférez */
-    color: white; /* Choisissez la couleur que vous préférez */
+    background-color: #4CAF50; 
+    color: white; 
     cursor: pointer;
 }
 
 .alarm-form button:hover {
-    background-color: #45a049; /* Choisissez la couleur que vous préférez */
+    background-color: #45a049; 
 }
 
 .alarm-form button:active {
